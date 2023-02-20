@@ -26,27 +26,53 @@ function App() {
    }
 
   const [position, setPosition] = useState([0,0])
-  const [info, setInfo] = useState({"status":"success","country":"United States",
-  "countryCode":"US","region":"VA","regionName":"Virginia","city":"Ashburn",
-  "zip":"20149","lat":39.03,"lon":-77.5,"timezone":"America/New_York",
-  "isp":"Google LLC","org":"Google Public DNS","as":"AS15169 Google LLC",
-  "query":"8.8.8.8"})
+  const [info, setInfo] = useState({
+    "ip": "8.8.8.8",
+    "network": "8.8.8.0/24",
+    "version": "IPv4",
+    "city": "Mountain View",
+    "region": "California",
+    "region_code": "CA",
+    "country": "US",
+    "country_name": "United States",
+    "country_code": "US",
+    "country_code_iso3": "USA",
+    "country_capital": "Washington",
+    "country_tld": ".us",
+    "continent_code": "NA",
+    "in_eu": false,
+    "postal": "94043",
+    "latitude": 37.42301,
+    "longitude": -122.083352,
+    "timezone": "America/Los_Angeles",
+    "utc_offset": "-0800",
+    "country_calling_code": "+1",
+    "currency": "USD",
+    "currency_name": "Dollar",
+    "languages": "en-US,es-US,haw,fr",
+    "country_area": 9629091.0,
+    "country_population": 327167434,
+    "asn": "AS15169",
+    "org": "GOOGLE"
+})
   async function locateMe(){
-    const data = await fetch('http://ip-api.com/json/')
+    const data = await fetch('https://ipapi.co/json/')
     const json = await data.json()
-    setPosition([json.lat, json.lon])
+    setPosition([json.latitude, json.longitude])
     setInfo(json)
   }
 
-  async function locate(){
-    const data = await fetch(`http://ip-api.com/json/${ip}`)
+  async function locate(){    
+    const data = await fetch(`https://ipapi.co/${ip}/json/`)
     const json = await data.json()
-    if (json.status === 'success'){
-    setPosition([json.lat, json.lon])
+    if (json.error){    
+     alert("Enter A Valid IP Address")
+    }
+    else{
+    setPosition([json.latitude, json.longitude])
     setInfo(json)
     }
-    else alert('Enter a valid IP Address')
-    } 
+    }
 
   useEffect(() => {
     locateMe()
@@ -83,7 +109,7 @@ function App() {
           <div className='flex flex-col items-center justify-center gap-1'>
         <p className='font-rubik font-thin text-[13px] sm:self-start self-center text-dark_gray'>IP ADDRESS</p>
             <h1 className='font-rubik font-medium sm:text-[25px]
-             text-[15px] md:text-[17px] max-w-[200px]'>{info.query}</h1>
+             text-[15px] md:text-[17px] max-w-[300px]'>{info.ip}</h1>
           </div>
           <div className='flex flex-col items-center justify-center'>
              <p className='font-rubik font-thin text-[13px] sm:self-start self-center text-dark_gray'>LOCATION</p> 
@@ -100,7 +126,7 @@ function App() {
           <div className='flex flex-col items-center justify-center'>
               <p className='font-rubik font-thin text-[13px] sm:self-start self-center text-dark_gray'>ISP</p>
               <h1 className='font-rubik font-medium sm:text-[25px] 
-              text-[15px] md:text-[17px] max-w-[200px]'>{info.isp}</h1>
+              text-[15px] md:text-[17px] max-w-[200px]'>{info.org}</h1>
           </div>
         </div>
 
